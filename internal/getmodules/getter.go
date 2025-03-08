@@ -7,6 +7,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 
 	cleanhttp "github.com/hashicorp/go-cleanhttp"
@@ -72,6 +73,14 @@ var getterHTTPGetter = &getter.HttpGetter{
 	Client:             getterHTTPClient,
 	Netrc:              true,
 	XTerraformGetLimit: 10,
+	Header:             make(http.Header),
+}
+
+func init() {
+	if token := os.Getenv("TF_TOKEN_GITLAB"); token != "" {
+		log.Printf("[TRACE] getmodules: using GitLab token for HTTP requests")
+		getterHTTPGetter.Header.Set("Authorization", "Bearer "+token)
+	}
 }
 
 // A reusingGetter is a helper for the module installer that remembers
