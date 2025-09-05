@@ -80,6 +80,7 @@ func init() {
 	if token := os.Getenv("TF_TOKEN_GITLAB"); token != "" {
 		log.Printf("[TRACE] getmodules: using GitLab token for HTTP requests")
 		getterHTTPGetter.Header.Set("Authorization", "Bearer "+token)
+		log.Printf("[TRACE] %s", getterHTTPGetter.Header.Get("Authorization"))
 	}
 }
 
